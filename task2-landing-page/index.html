@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lumina AI — The Future of Productivity</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #08090d;
+      --surface:  #111318;
+      --border:   rgba(255,255,255,0.08);
+      --text:     #e8eaf0;
+      --muted:    #6b7280;
+      --accent:   #6c63ff;
+      --accent2:  #00d4aa;
+      --grad:     linear-gradient(135deg, #6c63ff, #00d4aa);
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 22px 64px;
+      background: rgba(8,9,13,0.8); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-brand {
+      font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800;
+      background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    nav ul { display: flex; gap: 36px; list-style: none; }
+    nav a { text-decoration: none; font-size: 0.85rem; color: var(--muted); transition: color 0.2s; }
+    nav a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--grad); color: #fff; text-decoration: none;
+      padding: 10px 24px; border-radius: 6px; font-size: 0.82rem; font-weight: 500;
+      transition: opacity 0.2s;
+    }
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* ===== HERO ===== */
+    #hero {
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+      padding: 140px 24px 80px; position: relative; overflow: hidden;
+    }
+
+    .hero-orb {
+      position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none;
+    }
+    .orb1 { width: 500px; height: 500px; background: rgba(108,99,255,0.18); top: -100px; left: -100px; }
+    .orb2 { width: 400px; height: 400px; background: rgba(0,212,170,0.14); bottom: -80px; right: -80px; }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      border: 1px solid var(--border); border-radius: 99px;
+      padding: 6px 16px; font-size: 0.78rem; color: var(--muted);
+      margin-bottom: 28px; backdrop-filter: blur(8px);
+    }
+    .hero-badge span { width: 6px; height: 6px; border-radius: 50%; background: var(--accent2); display: inline-block; }
+
+    .hero-headline {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.8rem, 6vw, 5.5rem);
+      font-weight: 800; line-height: 1.05;
+      letter-spacing: -0.03em; margin-bottom: 24px;
+    }
+    .hero-headline .grad { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+    .hero-sub {
+      font-size: clamp(1rem, 1.5vw, 1.15rem); color: var(--muted);
+      max-width: 580px; line-height: 1.75; margin-bottom: 44px; font-weight: 300;
+    }
+
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+
+    .btn-grad {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--grad); color: #fff; text-decoration: none;
+      padding: 15px 34px; border-radius: 8px; font-weight: 500;
+      font-size: 0.9rem; transition: opacity 0.2s, transform 0.2s;
+    }
+    .btn-grad:hover { opacity: 0.88; transform: translateY(-2px); }
+
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 10px;
+      border: 1px solid var(--border); color: var(--text); text-decoration: none;
+      padding: 15px 34px; border-radius: 8px; font-weight: 500;
+      font-size: 0.9rem; transition: border-color 0.2s, transform 0.2s;
+    }
+    .btn-ghost:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+    .hero-stats {
+      display: flex; gap: 48px; margin-top: 64px; flex-wrap: wrap; justify-content: center;
+    }
+    .hero-stat-num {
+      font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800;
+      background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      line-height: 1;
+    }
+    .hero-stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+
+    /* ===== SHARED ===== */
+    section { padding: 100px 64px; }
+
+    .tag {
+      display: inline-block; font-size: 0.72rem; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--accent2); font-weight: 500;
+      margin-bottom: 12px;
+    }
+    .section-h {
+      font-family: 'Syne', sans-serif; font-size: clamp(1.8rem, 3vw, 2.8rem);
+      font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 14px;
+    }
+    .section-sub { font-size: 1rem; color: var(--muted); line-height: 1.75; font-weight: 300; max-width: 540px; margin-bottom: 56px; }
+
+    /* ===== FEATURES ===== */
+    #features { background: var(--bg); }
+
+    .features-header { text-align: center; }
+    .features-header .section-sub { margin: 0 auto 56px; }
+
+    .features-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 20px;
+    }
+
+    .feature-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 32px 28px;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .feature-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+
+    .feature-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; margin-bottom: 18px;
+    }
+    .ic-purple { background: rgba(108,99,255,0.15); }
+    .ic-teal   { background: rgba(0,212,170,0.12); }
+    .ic-pink   { background: rgba(236,72,153,0.12); }
+    .ic-amber  { background: rgba(245,158,11,0.12); }
+    .ic-blue   { background: rgba(59,130,246,0.12); }
+    .ic-green  { background: rgba(34,197,94,0.12); }
+
+    .feature-title { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+    .feature-desc { font-size: 0.86rem; color: var(--muted); line-height: 1.68; }
+
+    /* ===== HOW IT WORKS ===== */
+    #how { background: var(--surface); }
+
+    .how-inner {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+    }
+
+    .steps { display: flex; flex-direction: column; gap: 0; }
+
+    .step {
+      display: flex; gap: 20px; padding: 24px 0;
+      border-bottom: 1px solid var(--border); transition: padding-left 0.3s;
+      cursor: default;
+    }
+    .step:last-child { border-bottom: none; }
+    .step:hover { padding-left: 8px; }
+
+    .step-num {
+      width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+      background: var(--grad); display: flex; align-items: center; justify-content: center;
+      font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 800; color: #fff;
+    }
+    .step-title { font-family: 'Syne', sans-serif; font-weight: 700; margin-bottom: 5px; }
+    .step-desc { font-size: 0.86rem; color: var(--muted); line-height: 1.65; }
+
+    .how-visual {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 20px; padding: 40px; display: flex; flex-direction: column; gap: 16px;
+    }
+    .mock-bar {
+      height: 10px; border-radius: 99px; background: var(--border);
+      overflow: hidden;
+    }
+    .mock-fill {
+      height: 100%; border-radius: 99px; background: var(--grad);
+      animation: pulse-bar 2s ease-in-out infinite alternate;
+    }
+    @keyframes pulse-bar { from { opacity: 0.5; } to { opacity: 1; } }
+
+    .mock-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px; }
+    .mock-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 16px;
+    }
+    .mock-dot { width: 28px; height: 28px; border-radius: 50%; background: var(--grad); margin-bottom: 10px; }
+    .mock-line { height: 6px; border-radius: 4px; background: var(--border); margin-bottom: 6px; }
+    .mock-line.short { width: 60%; }
+
+    /* ===== PRICING ===== */
+    #pricing { background: var(--bg); text-align: center; }
+    #pricing .section-sub { margin: 0 auto 56px; }
+
+    .pricing-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+      gap: 24px; max-width: 900px; margin: 0 auto;
+    }
+
+    .price-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 20px; padding: 36px 32px; text-align: left;
+      transition: transform 0.3s;
+    }
+    .price-card:hover { transform: translateY(-5px); }
+    .price-card.featured { border-color: var(--accent); position: relative; }
+    .popular-badge {
+      position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+      background: var(--grad); color: #fff; font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.1em; padding: 4px 16px; border-radius: 99px; white-space: nowrap;
+    }
+
+    .price-name { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--muted); margin-bottom: 12px; }
+    .price-amount {
+      font-family: 'Syne', sans-serif; font-size: 2.8rem; font-weight: 800;
+      line-height: 1; margin-bottom: 6px;
+    }
+    .price-amount sup { font-size: 1.2rem; vertical-align: super; }
+    .price-per { font-size: 0.8rem; color: var(--muted); margin-bottom: 24px; }
+    .price-features { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px; }
+    .price-features li { font-size: 0.86rem; color: var(--muted); display: flex; gap: 10px; align-items: flex-start; }
+    .price-features li::before { content: '✓'; color: var(--accent2); font-weight: 700; flex-shrink: 0; }
+
+    /* ===== TESTIMONIALS ===== */
+    #testimonials { background: var(--surface); }
+    #testimonials .section-h { text-align: center; }
+    #testimonials .section-sub { text-align: center; margin: 0 auto 56px; }
+
+    .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 20px; }
+
+    .testi-card {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px;
+      transition: border-color 0.3s;
+    }
+    .testi-card:hover { border-color: var(--accent); }
+
+    .testi-stars { color: #fbbf24; font-size: 0.85rem; margin-bottom: 14px; letter-spacing: 2px; }
+    .testi-text { font-size: 0.9rem; color: var(--muted); line-height: 1.75; margin-bottom: 20px; font-style: italic; }
+
+    .testi-author { display: flex; align-items: center; gap: 12px; }
+    .testi-avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Syne', sans-serif; font-size: 0.8rem; font-weight: 800; color: #fff;
+    }
+    .testi-name { font-size: 0.88rem; font-weight: 500; }
+    .testi-role { font-size: 0.75rem; color: var(--muted); }
+
+    /* ===== CTA ===== */
+    #cta {
+      background: var(--bg); text-align: center;
+      padding: 120px 24px;
+      position: relative; overflow: hidden;
+    }
+    .cta-orb {
+      position: absolute; border-radius: 50%; filter: blur(100px); pointer-events: none;
+    }
+    .cta-orb1 { width: 400px; height: 400px; background: rgba(108,99,255,0.2); top: 50%; left: 50%; transform: translate(-50%,-50%); }
+
+    #cta .section-h { font-size: clamp(2rem, 4vw, 3.5rem); margin-bottom: 16px; position: relative; }
+    #cta .section-sub { margin: 0 auto 44px; position: relative; }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: #050608; border-top: 1px solid var(--border);
+      padding: 48px 64px 32px;
+    }
+    .footer-top {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px;
+    }
+    .footer-brand { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; margin-bottom: 14px; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .footer-about { font-size: 0.84rem; color: var(--muted); line-height: 1.7; max-width: 260px; }
+    .footer-col h4 { font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; margin-bottom: 16px; color: var(--text); }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col a { font-size: 0.83rem; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .footer-col a:hover { color: var(--text); }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 24px; border-top: 1px solid var(--border); font-size: 0.78rem; color: var(--muted); flex-wrap: wrap; gap: 12px; }
+
+    /* ===== REVEAL ===== */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      nav ul { display: none; }
+      section { padding: 70px 24px; }
+      .how-inner { grid-template-columns: 1fr; gap: 40px; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
+      footer { padding: 40px 24px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">Lumina AI</div>
+  <ul>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#how">How it Works</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+  </ul>
+  <a href="#pricing" class="nav-cta">Get Started Free</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-orb orb1"></div>
+  <div class="hero-orb orb2"></div>
+
+  <div class="hero-badge">
+    <span></span> Now in Public Beta — Join 50,000+ users
+  </div>
+
+  <h1 class="hero-headline">
+    Work smarter with<br/><span class="grad">AI-powered</span> productivity
+  </h1>
+
+  <p class="hero-sub">
+    Lumina AI automates your workflow, summarizes your docs, and writes your reports — so you can focus on what actually matters.
+  </p>
+
+  <div class="hero-actions">
+    <a href="#pricing" class="btn-grad">Start Free — No Credit Card ↗</a>
+    <a href="#how" class="btn-ghost">▶ Watch Demo</a>
+  </div>
+
+  <div class="hero-stats">
+    <div><div class="hero-stat-num">50K+</div><div class="hero-stat-label">Active Users</div></div>
+    <div><div class="hero-stat-num">4.9★</div><div class="hero-stat-label">Average Rating</div></div>
+    <div><div class="hero-stat-num">3hrs</div><div class="hero-stat-label">Saved Per Day</div></div>
+    <div><div class="hero-stat-num">99.9%</div><div class="hero-stat-label">Uptime SLA</div></div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="features-header reveal">
+    <div class="tag">✦ Features</div>
+    <h2 class="section-h">Everything you need to move faster</h2>
+    <p class="section-sub">Built for teams who want results, not more meetings. Lumina handles the busywork so your team can do their best work.</p>
+  </div>
+
+  <div class="features-grid">
+    <div class="feature-card reveal">
+      <div class="feature-icon ic-purple">🧠</div>
+      <div class="feature-title">AI Writing Assistant</div>
+      <div class="feature-desc">Generate emails, reports, proposals and social posts in seconds. Trained on your brand tone.</div>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon ic-teal">📄</div>
+      <div class="feature-title">Document Summarizer</div>
+      <div class="feature-desc">Upload any PDF or Word doc and get a crisp bullet-point summary in under 10 seconds.</div>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon ic-pink">🤖</div>
+      <div class="feature-title">Workflow Automation</div>
+      <div class="feature-desc">Connect your apps — Slack, Notion, Gmail — and automate repetitive tasks with no-code flows.</div>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon ic-amber">📊</div>
+      <div class="feature-title">Smart Analytics</div>
+      <div class="feature-desc">See how your team uses Lumina, track time saved and measure productivity gains weekly.</div>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon ic-blue">🔒</div>
+      <div class="feature-title">Enterprise Security</div>
+      <div class="feature-desc">SOC2 Type II compliant. All data encrypted at rest and in transit. GDPR ready.</div>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon ic-green">🌐</div>
+      <div class="feature-title">40+ Integrations</div>
+      <div class="feature-desc">Works with the tools you already use — Google Workspace, Slack, Jira, HubSpot and more.</div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="how-inner">
+    <div class="reveal">
+      <div class="tag">✦ How It Works</div>
+      <h2 class="section-h">Set up in under<br/>5 minutes</h2>
+      <p class="section-sub">No lengthy onboarding. No consultants. Just connect, configure, and start saving time today.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div><div class="step-title">Create your free account</div><div class="step-desc">Sign up with Google or email. No credit card required to get started.</div></div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div><div class="step-title">Connect your tools</div><div class="step-desc">Link Slack, Gmail, Notion or any of our 40+ integrations in one click.</div></div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div><div class="step-title">Let AI do the heavy lifting</div><div class="step-desc">Lumina learns your workflow and starts automating tasks and surfacing insights.</div></div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div><div class="step-title">Watch your productivity soar</div><div class="step-desc">Users report saving an average of 3 hours per day within the first week.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="how-visual reveal">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <span style="font-family:'Syne',sans-serif;font-size:0.88rem;font-weight:700;">Productivity Score</span>
+        <span style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">94%</span>
+      </div>
+      <div class="mock-bar"><div class="mock-fill" style="width:94%;"></div></div>
+      <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:0.72rem;color:var(--muted);">
+        <span>Jan</span><span>Mar</span><span>Jun</span><span>Now</span>
+      </div>
+      <div class="mock-cards">
+        <div class="mock-card">
+          <div class="mock-dot"></div>
+          <div class="mock-line"></div>
+          <div class="mock-line short"></div>
+          <div style="font-size:0.72rem;color:var(--muted);margin-top:6px;">Tasks automated</div>
+          <div style="font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;">2,847</div>
+        </div>
+        <div class="mock-card">
+          <div class="mock-dot" style="background:var(--accent2);"></div>
+          <div class="mock-line"></div>
+          <div class="mock-line short"></div>
+          <div style="font-size:0.72rem;color:var(--muted);margin-top:6px;">Hours saved</div>
+          <div style="font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;">134h</div>
+        </div>
+      </div>
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px;margin-top:4px;">
+        <div style="font-size:0.75rem;color:var(--muted);margin-bottom:8px;">Recent activity</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;align-items:center;gap:10px;font-size:0.8rem;">
+            <span style="width:6px;height:6px;border-radius:50%;background:var(--accent2);flex-shrink:0;"></span>
+            <span style="color:var(--muted);">Report summarized — 3 pages → 5 bullets</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:0.8rem;">
+            <span style="width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;"></span>
+            <span style="color:var(--muted);">Email drafted from bullet points</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:0.8rem;">
+            <span style="width:6px;height:6px;border-radius:50%;background:#fbbf24;flex-shrink:0;"></span>
+            <span style="color:var(--muted);">Slack digest sent to #team channel</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="tag reveal">✦ Pricing</div>
+  <h2 class="section-h reveal">Simple, honest pricing</h2>
+  <p class="section-sub reveal">Start free forever. Upgrade when you need more power. No hidden fees, ever.</p>
+
+  <div class="pricing-grid">
+    <div class="price-card reveal">
+      <div class="price-name">Free</div>
+      <div class="price-amount"><sup>$</sup>0</div>
+      <div class="price-per">forever</div>
+      <ul class="price-features">
+        <li>5 AI generations / day</li>
+        <li>2 document summaries / month</li>
+        <li>3 integrations</li>
+        <li>Community support</li>
+      </ul>
+      <a href="#" class="btn-ghost" style="display:block;text-align:center;padding:12px;">Get Started Free</a>
+    </div>
+    <div class="price-card featured reveal">
+      <div class="popular-badge">MOST POPULAR</div>
+      <div class="price-name">Pro</div>
+      <div class="price-amount" style="background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;"><sup>$</sup>19</div>
+      <div class="price-per">per user / month</div>
+      <ul class="price-features">
+        <li>Unlimited AI generations</li>
+        <li>Unlimited document summaries</li>
+        <li>All 40+ integrations</li>
+        <li>Priority support (24hr)</li>
+        <li>Custom AI tone settings</li>
+      </ul>
+      <a href="#" class="btn-grad" style="display:block;text-align:center;padding:12px;">Start 14-Day Trial</a>
+    </div>
+    <div class="price-card reveal">
+      <div class="price-name">Enterprise</div>
+      <div class="price-amount">Custom</div>
+      <div class="price-per">contact us</div>
+      <ul class="price-features">
+        <li>Everything in Pro</li>
+        <li>SSO &amp; SAML</li>
+        <li>Dedicated account manager</li>
+        <li>SLA guarantee</li>
+        <li>On-premise deployment</li>
+      </ul>
+      <a href="#" class="btn-ghost" style="display:block;text-align:center;padding:12px;">Contact Sales</a>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="tag reveal" style="display:block;text-align:center;">✦ Testimonials</div>
+  <h2 class="section-h reveal">Loved by teams worldwide</h2>
+  <p class="section-sub reveal">Don't take our word for it — hear from real Lumina users.</p>
+
+  <div class="testi-grid">
+    <div class="testi-card reveal">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-text">"Lumina cut our weekly reporting time from 4 hours to 20 minutes. It's the best SaaS tool we've adopted this year."</div>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:linear-gradient(135deg,#6c63ff,#00d4aa);">PR</div>
+        <div><div class="testi-name">Priya Rajan</div><div class="testi-role">Head of Ops, FinStartup</div></div>
+      </div>
+    </div>
+    <div class="testi-card reveal">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-text">"The document summarizer alone is worth it. I can review 10 contracts in the time it used to take for 2."</div>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:linear-gradient(135deg,#ec4899,#6c63ff);">MK</div>
+        <div><div class="testi-name">Marcus Klein</div><div class="testi-role">Senior Lawyer, LegalTech Co.</div></div>
+      </div>
+    </div>
+    <div class="testi-card reveal">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-text">"Setup took 4 minutes and within an hour our Slack was auto-summarizing meeting notes. Incredible product."</div>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444);">AS</div>
+        <div><div class="testi-name">Ayesha Sharma</div><div class="testi-role">CTO, GrowthLab India</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="cta-orb cta-orb1"></div>
+  <div class="reveal" style="position:relative;">
+    <div class="tag">✦ Get Started Today</div>
+    <h2 class="section-h">Ready to save 3 hours<br/>every single day?</h2>
+    <p class="section-sub">Join 50,000+ professionals who already work smarter with Lumina AI. Free forever, upgrade anytime.</p>
+    <a href="#pricing" class="btn-grad">Start Free — No Credit Card ↗</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand">Lumina AI</div>
+      <div class="footer-about">AI-powered productivity for modern teams. Automate the busywork, amplify the real work.</div>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <ul>
+        <li><a href="#">Features</a></li>
+        <li><a href="#">Pricing</a></li>
+        <li><a href="#">Integrations</a></li>
+        <li><a href="#">Changelog</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Press</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="#">Help Centre</a></li>
+        <li><a href="#">Community</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Lumina AI. All rights reserved. #codsoft #webdevelopment #internship</span>
+    <span>Made with ♥ in Jaipur, India</span>
+  </div>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
